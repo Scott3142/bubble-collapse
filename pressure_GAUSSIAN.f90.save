@@ -13,7 +13,7 @@ program pressure_pulse_GAUSSIAN_vr
     !tf: total number of time steps
     double precision, parameter   :: Pb = 0d0, rho = 1d0,&
         delt = 0d0, Pref = 1d0,&!500d0,&!5280d0,&
-        lam = 1.07d0, eps = 100d0,&!100d0 !Strength parameter
+        lam = 0d0, eps = 100d0,&!100d0 !Strength parameter
         Wn = 89.4d0, &          ! -27.72d0
         Us = 1d0, Pa = 2000000d0, PP0 = 101000,&!MACH = 0.0214d0     ! 89.11d0
         Rhow = 998d0, R0 = 1d-6, freq = 2000000d0,&
@@ -101,7 +101,8 @@ program pressure_pulse_GAUSSIAN_vr
 
     double precision              :: rad, length,&
         pi, &!dphi,&
-        dt, time, thit,&
+        dt, 
+time, thit,&
         Gimage_int1, Gimage_int2, Himage_int1, Himage_int2,&
         av_norm_vel,&
         jet_hit,&
@@ -244,7 +245,7 @@ program pressure_pulse_GAUSSIAN_vr
     !*** Initial potential on bubble surface (from spherical inviscid Rayleigh Eqn.)
     phi_0 = 0d0!-0.1d0*((2d0/3d0)*((1d0/0.1d0)**3 - 1d0))**0.5d0
 
-    height = 10d0 ! Initial height of bubble centre from wall
+    height = 5d0 ! Initial height of bubble centre from wall
 
     mu = 1d0 ! (1/RE) viscosity
     lambda = 10d0!0.1d0 ! (Equal to Deborah number) relaxation time

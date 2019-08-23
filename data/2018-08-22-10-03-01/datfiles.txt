@@ -1,0 +1,195 @@
+###########################################################################
+
+bub_surf_before2.dat, bub_surf_before3.dat, bub_surf_before.dat
+
+  call reflect_surface(r_graph, z_graph, r, z, np)
+
+    do i = 1, (2*np + 1) !! Write position of bubble surface to file 999
+      write(1001,*) r_graph(i), z_graph(i)
+    enddo
+
+###########################################################################
+
+busu_times_before.dat
+
+  write(998,*) 'VARIABLES JUST BEFORE SMOOTHING = "r", "z"'
+  write(998,*) 'ZONE T="time:',time,'",I=',(np + 1),',J=',1,',F=POINT'
+
+###########################################################################
+
+centroid_eqrad.dat
+
+  !Bubble centroid position and equivalent radius
+
+  centroid = sum(z)/(np+1)
+  eq_rad = ( 3d0*vol/(4d0*pi) )**(1d0/3d0)
+
+  do i=1,(np+1)
+    pyth(i) = ( r(i)**2d0 + (z(i)-height)**2d0 )**(0.5d0)
+  enddo
+
+  do i=1,(np+1)
+    devi(i) = pyth(i) - sum(pyth)/(np+1)
+  enddo
+
+  if((ll.eq.1).and.(mod(t,10).eq.0))then
+    write(383,*) time, centroid, eq_rad, maxval(abs(devi))
+  endif
+
+###########################################################################
+
+ENERGY.dat, ENERGYTERMS.dat, ENERGYTERMS_AFTER.dat
+
+  !Calculate the energy (should remain constant) to check result
+
+  call energy_routine(np, N_trap, r, z, torus_switch, deltaPhi, jet_velocity,&
+      phi, HP, rem_pot, lam, wall_switch, vri, vzi,&
+      V0, eps, delt, total_energy, E1_app, E1, E2, E3, E4, jet_approx)
+
+  if ((ll.eq.1).and.(mod(t,10).eq.0))then
+      write(300,*) time, total_energy
+      write(200,*) E1, E2, E3, E4
+      if((torus_switch.eq.1).and.(mod(teller,50).eq.0))then
+          write(201,*) time, E1, E2, E3, E4
+      endif
+  endif
+
+###########################################################################
+
+field_variables.dat
+
+  if(torus_switch.eq.0)then
+    if(mod(t,6).eq.0)then
+      write(234,*) time, preshwall(1), maxval(PBB), minval(PBB)!, preshwall(2), preshwall(3)
+    endif
+  elseif(torus_switch.eq.1)then
+    if(mod(teller,30).eq.0)then
+      write(234,*) time, preshwall(1), maxval(PBB), minval(PBB)!, preshwall(2), preshwall(3)
+    endif
+  endif
+
+###########################################################################
+
+jet_vel.dat
+
+  !Write time and jet velocity to file
+
+  if(torus_switch.eq.0)then
+    if(mod(t,10).eq.0)then
+      write(888,*) time, HP(1)!, HP(1) + HP(np+1)
+    endif
+  elseif(torus_switch.eq.1)then
+    if(mod(teller,20).eq.0)then
+      write(*,*) time, phi(1), HP(1), total_energy, Pinf(1), Pinf2(1)
+
+    endif
+    if(mod(teller,20).eq.0)then
+    write(888,*) time, jett
+    write(555,*) time, jett
+    endif
+  endif
+
+###########################################################################
+
+pressurepulses.dat
+
+if((ll.eq.1).and.(torus_switch.eq.0).and.(mod(t,50).eq.0))then
+  write(711,*) time, pulsebot, pulsetop
+endif
+
+###########################################################################
+
+rad_vs_time.dat
+
+if(torus_switch.eq.0)then
+  if(mod(t,20).eq.0)then
+    write(*,*) time, pulsetop, maxval(HP), Pinf(1), Pinf2(1), jet_hit
+  endif
+  write(666,*) time, rad, minrdist, Pinf(1)
+endif
+
+###########################################################################
+
+volume.dat
+
+  !Calculate the volume of the bubble
+
+  call calc_vol(np, r, ar, br, cr, dr, er, az, bz, cz, dz, ez, s, vol)
+
+  vol = -vol
+
+  vol2 = vol/((4d0/3d0)*pi)
+  if((t.eq.0).and.(ll.eq.1))then
+      V0 = vol!4d0*pi*( 0.1651d0**3d0 )/3d0      !vol
+  endif
+
+
+  if(mod(t,20).eq.0)then
+      write(333,*) time, vol
+  endif
+
+###########################################################################
+
+Remsplines.dat
+
+## NONE ##
+
+transition times.dat
+
+## NONE ##
+
+volume_after.dat
+
+## NONE ##
+
+2Deriv2_Remsplines.dat
+
+## NONE ##
+
+atransitiontimes.dat
+
+## NONE ##
+
+bubsurf_2ndvr.dat
+
+## NONE ##
+
+bub_surf_after2.dat
+
+## NONE ##
+
+bub_surf_after.dat
+
+## NONE ##
+
+bub_surf_reconnected.dat
+
+## NONE ##
+
+busu_times_after.dat
+
+## NONE ##
+
+busu_times_vortexsecond.dat
+
+## NONE ##
+
+Deriv_Remsplines.dat
+
+## NONE ##
+
+ENERGYTERMS_AFTER.dat
+
+## NONE ##
+
+jet_velocity_after.dat
+
+## NONE ##
+
+norm_tang_vels.dat
+
+## NONE ##
+
+pulse_times.dat
+
+## NONE ##
